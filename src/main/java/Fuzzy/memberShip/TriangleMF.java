@@ -10,7 +10,18 @@ public class TriangleMF implements IMembershipFunction{
 
     @Override
     public double membership(double x) {
-        return 0;
+        if (x <= a || x >= c) {
+            return 0;
+        }
+        else if (x == b) {
+            return 1;
+        }
+        else if (x > a && x < b){
+            return (x - a) / (b - a);
+        }
+        else {
+            return (c - x) / (c - b);
+        }
     }
     public double[] getParameters() {
         return new double[]{a,b,c};
