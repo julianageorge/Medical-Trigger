@@ -8,6 +8,17 @@ public class TriangleMF implements IMembershipFunction{
         this.c=c;
     }
 
+    private void validateParameters(double a, double b, double c) {
+        if (!(a <= b && b <= c)) {
+            throw new IllegalArgumentException(
+                    "Triangular MF Must: a <= b <= c. Got: a=" + a + ", b=" + b + ", c=" + c);
+        }
+        if (a == c) {
+            throw new IllegalArgumentException(
+                    "Triangular MF Must: a < c");
+        }
+    }
+
     @Override
     public double membership(double x) {
         if (x <= a || x >= c) {
@@ -27,5 +38,11 @@ public class TriangleMF implements IMembershipFunction{
         return new double[]{a,b,c};
     }
     public String getType() {
-        return "triangle"; }
+        return "triangle";
+    }
+
+    @Override
+    public boolean isValid() {
+        return a <= b && b <= c && a < c;
+    }
 }

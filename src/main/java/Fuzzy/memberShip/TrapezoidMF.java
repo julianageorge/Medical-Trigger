@@ -10,7 +10,16 @@ public class TrapezoidMF implements IMembershipFunction {
         this.c = c;
         this.d = d;
     }
-
+    private void validateParameters(double a, double b, double c, double d) {
+        if (!(a <= b && b <= c && c <= d)) {
+            throw new IllegalArgumentException(
+                    "Trapezoidal MF Must: a <= b <= c <= d. Got: a=" + a + ", b=" + b + ", c=" + c + ", d=" + d);
+        }
+        if (a == d) {
+            throw new IllegalArgumentException(
+                    "Trapezoidal MF Must: a < d ");
+        }
+    }
 
     @Override
     public double membership(double x) {
@@ -36,5 +45,10 @@ public class TrapezoidMF implements IMembershipFunction {
     @Override
     public String getType() {
         return "trapezoid";
+    }
+
+    @Override
+    public boolean isValid() {
+        return a <= b && b <= c && c <= d && a < d;
     }
 }

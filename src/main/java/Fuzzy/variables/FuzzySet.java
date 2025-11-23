@@ -11,8 +11,9 @@ public class FuzzySet {
             this.name = name;
             this.mf = mf;
         }
-
-
+    public double getMembership(double value) {
+        return mf.membership(value);
+    }
         public String getName() {
             return name;
         }
