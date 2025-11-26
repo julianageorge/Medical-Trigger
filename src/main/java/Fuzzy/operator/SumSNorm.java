@@ -5,5 +5,5 @@ public class SumSNorm implements SNorm{
         public double or(double a, double b) {
             return a + b - (a * b);
         }
-    }
+}
 
