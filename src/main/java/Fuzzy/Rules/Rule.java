@@ -15,6 +15,7 @@ public class Rule {
     public Map<String, String> antecedent;
     public Map<String, String> consequent;
 
+
     public Rule(int id, Map<String, String> antecedent, Map<String, String> consequent) {
         this.id = id;
         this.antecedent = antecedent;
@@ -70,9 +71,9 @@ public class Rule {
             // THEN out = HR + Temp
             return inputs.values().stream().mapToDouble(d -> d).sum();
         }
+    }
 
-    public Map<String, String> antecedent = new HashMap<>();
-    public Map<String, String> consequent = new HashMap<>();
+
 
     public double applyImplication(TNorm tnorm, double antecedentStrength, double consequentMembership) {
         if (!enabled) {
