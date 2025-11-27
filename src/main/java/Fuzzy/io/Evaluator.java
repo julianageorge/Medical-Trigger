@@ -2,6 +2,7 @@ package Fuzzy.io;
 
 import Fuzzy.Defuzzy.DefuzzificationMethod;
 import Fuzzy.Rules.RuleBase;
+import Fuzzy.fuzzifier.Fuzzifier;
 import Fuzzy.inference.InferenceEngine;
 import Fuzzy.operator.SNorm;
 import Fuzzy.operator.TNorm;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Evaluator {
+    private Fuzzifier fuzzifier;
     private InferenceEngine engine;
     private RuleBase ruleBase;
 
@@ -24,11 +26,13 @@ public class Evaluator {
     private Map<Double, Double> aggregatedOutput;
 
 
-    public Evaluator(InferenceEngine engine,
+    public Evaluator(Fuzzifier fuzzifier,
+                     InferenceEngine engine,
                      RuleBase ruleBase,
                      DefuzzificationMethod defuzzifier,
                      TNorm tnorm,
                      SNorm snorm) {
+        this.fuzzifier = fuzzifier;
         this.engine = engine;
         this.ruleBase = ruleBase;
         this.defuzzifier = defuzzifier;
@@ -37,8 +41,9 @@ public class Evaluator {
     }
 
 
-    public double evaluate(Map<String, Double> inputs) {
-        return engine.evaluate(inputs, ruleBase);
+    public double evaluate(Map<String, Double> crispInputs) {
+        fuzzifiedInputs = fuzzifier.fuzzify(crispInputs);
+        return engine.evaluate(crispInputs, ruleBase);
     }
 
     private Map<Double, Double> aggregateOutputs(List<Map<String, Double>> ruleOutputs) {
