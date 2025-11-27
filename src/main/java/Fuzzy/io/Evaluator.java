@@ -42,7 +42,7 @@ public class Evaluator {
 
 
     public double evaluate(Map<String, Double> crispInputs) {
-        fuzzifiedInputs = fuzzifier.fuzzify(crispInputs);
+        fuzzifiedInputs = fuzzifier.fuzzifyWithErrorHandling(crispInputs);
         return engine.evaluate(crispInputs, ruleBase);
     }
 
