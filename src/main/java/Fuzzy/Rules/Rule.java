@@ -1,8 +1,11 @@
 package Fuzzy.Rules;
+
 import Fuzzy.operator.TNorm;
 import Fuzzy.operator.SNorm;
-import Fuzzy.variables.LinguisticVariable;
+import Fuzzy.Validation.ValidationException;
 import Fuzzy.variables.FuzzySet;
+import Fuzzy.variables.LinguisticVariable;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,11 +33,23 @@ public class Rule {
 
         for (String varName : antecedent.keySet()) {
 
-            double crispValue = inputs.get(varName);
-            String setName = antecedent.get(varName);
-
             LinguisticVariable lv = variables.get(varName);
+            if (lv == null) {
+                throw new ValidationException("Rule references unknown variable " + varName);
+            }
+
+            Double rawValue = inputs.get(varName);
+            if (rawValue == null) {
+                throw new ValidationException("Missing crisp input for variable " + varName);
+            }
+
+            double crispValue = clampToDomain(rawValue, lv);
+
+            String setName = antecedent.get(varName);
             FuzzySet fs = lv.getFuzzySet(setName);
+            if (fs == null) {
+                throw new ValidationException("Variable " + varName + " missing fuzzy set " + setName);
+            }
 
             double membership = fs.getMembership(crispValue);
 
@@ -46,6 +61,16 @@ public class Rule {
         }
 
         return result * weight;
+    }
+
+    private double clampToDomain(double value, LinguisticVariable variable) {
+        if (value < variable.getMin()) {
+            return variable.getMin();
+        }
+        if (value > variable.getMax()) {
+            return variable.getMax();
+        }
+        return value;
     }
 
     public FuzzySet getOutputSet(Map<String, LinguisticVariable> variables) {
